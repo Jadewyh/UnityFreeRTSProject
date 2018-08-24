@@ -17,11 +17,12 @@ public enum DiplomacyStatus {
 }
 
 public class PlayerHandler : MonoBehaviour {
+	public string playerName = "undefined";
+	public Color playerColor = Color.white;
 	public Fraction playerFraction = Fraction.Nature;
 	public int currentResources = 1000;
+	public int currentRadars;
 	public bool isFrontendPlayer = false;
-	public Color playerColor = Color.white;
-	public string playerName = "undefined";
 	public List<GameObject> playerOwnedObjects;
 	public Dictionary<PlayerHandler,DiplomacyStatus> aggressionMatrix;
 	
@@ -34,7 +35,7 @@ public class PlayerHandler : MonoBehaviour {
 		aggressionMatrix = new Dictionary<PlayerHandler, DiplomacyStatus>();
 		gameManagerInstance = GameManager.myInstance;
 
-		foreach(PlayerHandler p in gameManagerInstance.playersInGame){
+		foreach(PlayerHandler p in gameManagerInstance.getAllPlayers()){
 			aggressionMatrix.Add(p,DiplomacyStatus.AttackPossible);
 		}
 		gameManagerInstance.onPlayerJoin += joinEvent;

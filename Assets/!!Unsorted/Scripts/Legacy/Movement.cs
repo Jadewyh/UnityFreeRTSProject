@@ -42,7 +42,7 @@ public class Movement : MonoBehaviour
         Cursor.SetCursor(Movementcursor, hotSpot, cursorMode);
         selected = true;
         firsttimeclick = true;
-        gameManager.selectedUnit = this.gameObject;
+        gameManager.guiManagerInstance.selectedUnit = this.gameObject;
     }
 
     // plays a random quote
@@ -110,7 +110,7 @@ public class Movement : MonoBehaviour
         {
             Cursor.SetCursor(defaultCursor, hotSpot, cursorMode);
             selected = false;
-            gameManager.selectedUnit = null;
+            gameManager.guiManagerInstance.selectedUnit = null;
         }
 
         // check Left Mouse Button

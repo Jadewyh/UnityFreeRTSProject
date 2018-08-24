@@ -97,10 +97,10 @@ public GameObject selectionBox
     {
         if (!selectionBox) return;
  // If the user right-clicks after selecting a unit, selection is toggled off and the default cursor is back.
-        if (Input.GetMouseButtonDown(1) && Values.gameManager.hasSomethingSelected)
+        if (Input.GetMouseButtonDown(1) && Values.gameManager.guiManagerInstance.hasSomethingSelected)
         {
             Cursor.SetCursor(AssignableFields.defaultCursorNoSelect, Values.mouseTargetPosition, AssignableFields.cursorMode);
-            Values.gameManager.selectedUnit = null;
+            Values.gameManager.guiManagerInstance.selectedUnit = null;
         }
 		
     }
@@ -250,7 +250,7 @@ public GameObject selectionBox
     private void LateUpdate()
     {
         if (!selectionBox) return;
-        if (!Values.gameManager.hasSomethingSelected && Input.GetMouseButton(0))
+        if (!Values.gameManager.guiManagerInstance.hasSomethingSelected && Input.GetMouseButton(0))
         {
             if (Input.GetMouseButtonDown(0))
                 Values.selectionBoxStartPoint = Input.mousePosition;
@@ -287,7 +287,7 @@ public GameObject selectionBox
                     && unitscreenpos.y >= Values.selectionBoxEndPoint.y))
                 {
                     g.isSelected = true;
-                    Values.gameManager.selectedUnits.Add(g.gameObject);
+                    Values.gameManager.guiManagerInstance.selectedUnits.Add(g.gameObject);
                 }
             }
             selectionBox.SetActive(false);

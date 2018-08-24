@@ -12,27 +12,38 @@ public class GameManager : MonoBehaviour
 {   
     public static GameManager myInstance;
      
-    [ReadOnly] public float _resources;
-    [ReadOnly] public int _PlayerRaderStations;
-
     public GameObject newUnitHierarchyParentObject;
 
-    public List<PlayerHandler> playersInGame;
+    [ReadOnly] private List<PlayerHandler> playersInGame;
 
     [ReadOnly] public MapManager mapManagerInstance;
     [ReadOnly] public GUIManager guiManagerInstance;
+    
+    [ReadOnly] public PlayerHandler UIPlayer;
     public event newPlayerJoined onPlayerJoin;
+    
+    public void addNewPlayer(PlayerHandler p){
+        if (p.isFrontendPlayer && UIPlayer != null)
+            Debug.LogError("There is already a front-end player defined! CONFLICT!");
+        else if (p.isFrontendPlayer)
+            UIPlayer = p;
+        
+        playersInGame.Add(p);
+    }
+    public PlayerHandler[] getAllPlayers(){
+        return playersInGame.ToArray();
+    }
 
-    public float Resources
+    public int Resources
     {
         get
         {
-            return this._resources;
+            return UIPlayer.currentResources;
         }
         set
         {
-            _resources = value;
-            guiManagerInstance.UI_ResourceDisplayText.text = "$: " + _resources;
+            UIPlayer.currentResources = value;
+            guiManagerInstance.UI_ResourceDisplayText.text = "$: " + UIPlayer.currentResources;
         }
     }
 
@@ -40,12 +51,12 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            return _PlayerRaderStations;
+            return UIPlayer.currentRadars;
         }
         set
         {
-            _PlayerRaderStations = value;
-            if (_PlayerRaderStations <= 0)
+            UIPlayer.currentRadars = value;
+            if (UIPlayer.currentRadars <= 0)
             {
                 guiManagerInstance.isMiniMapVisible = false;
             }
@@ -55,44 +66,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public GameObject selectedUnit
-    {
-        get
-        {
-            return selectedUnits.Count > 0?selectedUnits[0]:null;
-        }
-        set
-        {
-            selectedUnits.Clear();
-            if (value)
-            {
-                selectedUnits.Add(value);
-                guiManagerInstance.UI_unitFollowerDisplayObject.SetActive(true);
-                selectedUnit.GetComponent<GenericUnit>().isSelected = true;
-            }
-            else
-            {
-                if (selectedUnit)
-                    selectedUnit.GetComponent<GenericUnit>().isSelected = false;
-                selectedUnits.Remove(value);
-            }
-            guiManagerInstance.UI_unitFollowerDisplayObject.SetActive(value?true:false);
-            // setConstructionObjects();
-        }
-    }
-
-    public bool hasSomethingSelected {
-        get {
-            if (selectedUnit)
-                return true;
-            if (selectedUnits.Count > 0)
-                return true;
-
-            return false;
-        }
-    }
-
-    public List<GameObject> selectedUnits = new List<GameObject>();
+    
 
     /// <summary>
     /// Helper Method to create the Action Buttons
@@ -131,7 +105,7 @@ public class GameManager : MonoBehaviour
         mapManagerInstance = this.gameObject.GetComponentInChildren<MapManager>();
         guiManagerInstance = this.gameObject.GetComponentInChildren<GUIManager>();
         PlayerRadarStations = 0;
-        selectedUnit = null;
+        guiManagerInstance.selectedUnit = null;
     }
 
 
@@ -152,26 +126,26 @@ public class GameManager : MonoBehaviour
     {
         GenericUnit gu = null;
         // if a unit is selected
-        if (selectedUnit)
+        if (guiManagerInstance.selectedUnit)
         {
             // make camera follow!
-            Vector3 x = selectedUnit.transform.position;
+            Vector3 x = guiManagerInstance.selectedUnit.transform.position;
             x.y = x.y + 5f;
             x.z = x.z - 20f;
             guiManagerInstance.UI_UnitFollowerCamera.transform.position = x;
-            gu = selectedUnit.GetComponent<GenericUnit>();
+            gu = guiManagerInstance.selectedUnit.GetComponent<GenericUnit>();
         }
 
         // check Left Mouse Button
-        if (Input.GetMouseButtonDown(0) && selectedUnit)
+        if (Input.GetMouseButtonDown(0) && guiManagerInstance.selectedUnit)
         {
             //if (GUI._selectedUnitGeneric && GUI._selectedUnitGeneric.AudioSettings.moveQuotes.Length > 0)
                 //playRandomQuote(GUI._selectedUnitGeneric.AudioSettings.moveQuotes, Audio.quoteAudioSource);
 
-            if (gu && gu.canMove)
+            if (gu && gu.UnitSettings.canMove)
             {
                 calculateTargetPosition();
-                gu.movementSpeed = gu.maxMovementSpeed;
+                gu.movementSpeed = gu.UnitSettings.maxMovementSpeed;
             }
         }
     }
@@ -197,9 +171,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void calculateTargetPosition()
     {
-        if (!selectedUnit) return;
+        if (!guiManagerInstance.selectedUnit) return;
 
-        GenericUnit gu = selectedUnit.GetComponent<GenericUnit>();
+        GenericUnit gu = guiManagerInstance.selectedUnit.GetComponent<GenericUnit>();
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -220,14 +194,14 @@ public class GameManager : MonoBehaviour
     /// <param name="ignoreCosts">ignores the costs (for example via cinematic scene)</param>
     public void spawnObject(GenericConstructionObject callee, bool ignoreCosts = false)
     {
-        if (this._resources - callee.resourceCost >= 0 || ignoreCosts)
+        if (UIPlayer.currentResources - callee.resourceCost >= 0 || ignoreCosts)
         {
-            GameObject o = GameObject.Instantiate(callee.CreationObject, selectedUnit.transform.position, Quaternion.identity);
+            GameObject o = GameObject.Instantiate(callee.CreationObject, guiManagerInstance.selectedUnit.transform.position, Quaternion.identity);
             o.transform.Translate(0, 0, -1 * (callee.transform.forward.z + 2f));
             configureGameObject(o);
 
             if (!ignoreCosts)
-                this.Resources = this.Resources - callee.resourceCost;
+                this.Resources = this.Resources - (int)callee.resourceCost;
         }
         else
         {
@@ -248,7 +222,7 @@ public class GameManager : MonoBehaviour
             o.transform.parent = this.gameObject.transform;
 
         o.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        selectedUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        guiManagerInstance.selectedUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
  

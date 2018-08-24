@@ -32,6 +32,45 @@ public class GUIManager : MonoBehaviour {
         [ReadOnly] public Camera UI_UnitFollowerCamera;
         [ReadOnly] public Text UI_ResourceDisplayText;
     	[ReadOnly] public GameObject UI_bottomMiddleContainer;		
+		
+	    public List<GameObject> selectedUnits = new List<GameObject>();
+
+public GameObject selectedUnit
+    {
+        get
+        {
+            return selectedUnits.Count > 0?selectedUnits[0]:null;
+        }
+        set
+        {
+            selectedUnits.Clear();
+            if (value)
+            {
+                selectedUnits.Add(value);
+                UI_unitFollowerDisplayObject.SetActive(true);
+                selectedUnit.GetComponent<GenericUnit>().isSelected = true;
+            }
+            else
+            {
+                if (selectedUnit)
+                    selectedUnit.GetComponent<GenericUnit>().isSelected = false;
+                selectedUnits.Remove(value);
+            }
+            UI_unitFollowerDisplayObject.SetActive(value?true:false);
+            // setConstructionObjects();
+        }
+    }
+
+    public bool hasSomethingSelected {
+        get {
+            if (selectedUnit)
+                return true;
+            if (selectedUnits.Count > 0)
+                return true;
+
+            return false;
+        }
+    }
 
 		
 	// Use this for initialization

@@ -21,7 +21,7 @@ public class GenericConstructionObject: MonoBehaviour
     //OnMouseDown is called when the user clicks on the unit, thus toggling selection and changing the cursor...
     void OnMouseDown()
     {
-        gameManager.selectedUnit = this.gameObject;
+        gameManager.guiManagerInstance.selectedUnit = this.gameObject;
     }
 
 }
