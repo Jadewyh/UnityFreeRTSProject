@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         playersInGame.Add(p);
     }
     public PlayerHandler[] getAllPlayers(){
+        if (playersInGame == null) return null;
         return playersInGame.ToArray();
     }
 
@@ -51,10 +52,14 @@ public class GameManager : MonoBehaviour
     {
         get
         {
+            if (!UIPlayer)
+                return 0;
             return UIPlayer.currentRadars;
         }
         set
         {
+            if (!UIPlayer) return;
+
             UIPlayer.currentRadars = value;
             if (UIPlayer.currentRadars <= 0)
             {
