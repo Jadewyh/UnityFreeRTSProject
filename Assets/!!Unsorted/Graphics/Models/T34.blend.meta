@@ -1,0 +1,171 @@
+fileFormatVersion: 2
+guid: 56cd54ad27be940e0836c25162dde50e
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: T-34_Mesh01
+    100002: T-34_Mesh02
+    100004: T-34_Mesh03
+    100006: T-34_Mesh04
+    100008: T-34_Mesh05
+    100010: T-34_Mesh06
+    100012: T-34_Mesh07
+    100014: T-34_Mesh08
+    100016: T-34_Mesh09
+    100018: T-34_Mesh10
+    100020: T-34_Mesh11
+    100022: T-34_Mesh12
+    100024: T-34_Mesh13
+    100026: T-34_Mesh14
+    100028: T-34_Object01
+    100030: //RootNode
+    400000: T-34_Mesh01
+    400002: T-34_Mesh02
+    400004: T-34_Mesh03
+    400006: T-34_Mesh04
+    400008: T-34_Mesh05
+    400010: T-34_Mesh06
+    400012: T-34_Mesh07
+    400014: T-34_Mesh08
+    400016: T-34_Mesh09
+    400018: T-34_Mesh10
+    400020: T-34_Mesh11
+    400022: T-34_Mesh12
+    400024: T-34_Mesh13
+    400026: T-34_Mesh14
+    400028: T-34_Object01
+    400030: //RootNode
+    2100000: _FAF3FFF_D_RESULTULT36
+    2100002: _DC1CC2C_D_RESULT
+    2100004: _EDBB481_D_RESULT
+    2100006: FF2EC825_D_RESULT
+    2300000: T-34_Mesh01
+    2300002: T-34_Mesh02
+    2300004: T-34_Mesh03
+    2300006: T-34_Mesh04
+    2300008: T-34_Mesh05
+    2300010: T-34_Mesh06
+    2300012: T-34_Mesh07
+    2300014: T-34_Mesh08
+    2300016: T-34_Mesh09
+    2300018: T-34_Mesh10
+    2300020: T-34_Mesh11
+    2300022: T-34_Mesh12
+    2300024: T-34_Mesh13
+    2300026: T-34_Mesh14
+    2300028: T-34_Object01
+    3300000: T-34_Mesh01
+    3300002: T-34_Mesh02
+    3300004: T-34_Mesh03
+    3300006: T-34_Mesh04
+    3300008: T-34_Mesh05
+    3300010: T-34_Mesh06
+    3300012: T-34_Mesh07
+    3300014: T-34_Mesh08
+    3300016: T-34_Mesh09
+    3300018: T-34_Mesh10
+    3300020: T-34_Mesh11
+    3300022: T-34_Mesh12
+    3300024: T-34_Mesh13
+    3300026: T-34_Mesh14
+    3300028: T-34_Object01
+    4300000: T-34_Mesh04
+    4300002: T-34_Mesh07
+    4300004: T-34_Mesh06
+    4300006: T-34_Object01
+    4300008: T-34_Mesh01
+    4300010: T-34_Mesh11
+    4300012: T-34_Mesh13
+    4300014: T-34_Mesh03
+    4300016: T-34_Mesh09
+    4300018: T-34_Mesh12
+    4300020: T-34_Mesh08
+    4300022: T-34_Mesh10
+    4300024: T-34_Mesh05
+    4300026: T-34_Mesh14
+    4300028: T-34_Mesh02
+    7400000: Default Take
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
