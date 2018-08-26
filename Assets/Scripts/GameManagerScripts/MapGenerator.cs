@@ -53,7 +53,7 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    public void generateTerrainObject()
+    public void generateTerrainObject(bool genMesh = false)
     {
         CleanUp();
         /*
@@ -226,7 +226,8 @@ public class MapGenerator : MonoBehaviour
             heightMap.Apply();
         }
 
-        generateNavMesh();
+        if (genMesh)
+            generateNavMesh();
     }
 
     public void gameStart()

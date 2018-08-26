@@ -147,7 +147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -40.3}
+  m_AnchoredPosition: {x: 0, y: -33.2}
   m_SizeDelta: {x: 104.6, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &17322890
@@ -629,7 +629,7 @@ GameObject:
   - component: {fileID: 130044718}
   - component: {fileID: 130044717}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StartGameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -992,7 +992,7 @@ GameObject:
   - component: {fileID: 238052096}
   - component: {fileID: 238052095}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: BackToMainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1055,7 +1055,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 238052096}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1690283600}
+        m_MethodName: returnToMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &238052096
@@ -3149,7 +3160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 249, y: 16}
+  m_AnchoredPosition: {x: 249, y: -27.33}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &899554076
@@ -5227,6 +5238,12 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6a4ae1ea999f48ccaf4f9b70b905b79, type: 2}
   m_IsPrefabAsset: 0
+--- !u!114 &1690283600 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114330940709267414, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
+    type: 2}
+  m_PrefabInternal: {fileID: 1690283599}
+  m_Script: {fileID: 11500000, guid: c7401e5ede39b4704b858fb3187e671f, type: 3}
 --- !u!1 &1692168722
 GameObject:
   m_ObjectHideFlags: 0
@@ -5820,7 +5837,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 290, y: 37}
+  m_AnchoredPosition: {x: 290, y: -9.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1923615591

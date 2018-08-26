@@ -25,8 +25,11 @@ public class PlayerHandler : MonoBehaviour {
 	public bool isFrontendPlayer = false;
 	public List<GameObject> playerOwnedObjects;
 	public Dictionary<PlayerHandler,DiplomacyStatus> aggressionMatrix;
-	
+	public List<GameObject> playerInitialSpawnObjects;
+	public Transform playerObjectSpawnParent;
+
 	[ReadOnly] public GameManager gameManagerInstance;
+	[ReadOnly] public string gameObjectSpawnParentName;
 	
 
 	// Use this for initialization
@@ -34,11 +37,22 @@ public class PlayerHandler : MonoBehaviour {
 		playerOwnedObjects = new List<GameObject>();
 		aggressionMatrix = new Dictionary<PlayerHandler, DiplomacyStatus>();
 		gameManagerInstance = GameManager.myInstance;
+		gameObjectSpawnParentName = "PlayerHandler_"+playerName+"_ObjectParent";
 
 		foreach(PlayerHandler p in gameManagerInstance.getAllPlayers()){
 			aggressionMatrix.Add(p,DiplomacyStatus.AttackPossible);
 		}
 		gameManagerInstance.onPlayerJoin += joinEvent;
+
+		if (!playerObjectSpawnParent) {
+			GameObject go = GameObject.Find(gameObjectSpawnParentName);
+			playerObjectSpawnParent = go?go.transform:null;
+			if (!playerObjectSpawnParent){
+				go = new GameObject(gameObjectSpawnParentName);
+				go.transform.SetParent(gameManagerInstance.newUnitHierarchyParentObject.transform);
+				playerObjectSpawnParent = go?go.transform:null;
+			}
+		}
 	}
 	
 	void joinEvent(PlayerHandler p){

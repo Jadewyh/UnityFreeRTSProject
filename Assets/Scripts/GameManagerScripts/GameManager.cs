@@ -9,28 +9,52 @@ public delegate void newPlayerJoined(PlayerHandler p);
 
 
 public class GameManager : MonoBehaviour
-{   
+{
+    public void returnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
+    public void startGame()
+    {
+        mapManagerInstance.generateAI();
+        foreach (PlayerHandler p in playersInGame)
+        {
+            var spawningPoint = new Vector3(UnityEngine.Random.value * mapManagerInstance.TerrainRestriction.x,
+                                           UnityEngine.Random.value * mapManagerInstance.TerrainRestriction.y,
+                                            UnityEngine.Random.value * mapManagerInstance.TerrainRestriction.z);
+
+            foreach (GameObject o in p.playerInitialSpawnObjects)
+            {
+
+                GameObject obj = GameObject.Instantiate(o, spawningPoint, Quaternion.identity);
+                obj.transform.parent = p.playerObjectSpawnParent.transform;
+            }
+        }
+    }
     public static GameManager myInstance;
-     
+
     public GameObject newUnitHierarchyParentObject;
 
     [ReadOnly] private List<PlayerHandler> playersInGame;
 
     [ReadOnly] public MapManager mapManagerInstance;
     [ReadOnly] public GUIManager guiManagerInstance;
-    
+
     [ReadOnly] public PlayerHandler UIPlayer;
     public event newPlayerJoined onPlayerJoin;
-    
-    public void addNewPlayer(PlayerHandler p){
+
+    public void addNewPlayer(PlayerHandler p)
+    {
         if (p.isFrontendPlayer && UIPlayer != null)
             Debug.LogError("There is already a front-end player defined! CONFLICT!");
         else if (p.isFrontendPlayer)
             UIPlayer = p;
-        
+
         playersInGame.Add(p);
     }
-    public PlayerHandler[] getAllPlayers(){
+    public PlayerHandler[] getAllPlayers()
+    {
         if (playersInGame == null) return null;
         return playersInGame.ToArray();
     }
@@ -71,7 +95,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+
 
     /// <summary>
     /// Helper Method to create the Action Buttons
@@ -101,12 +125,12 @@ public class GameManager : MonoBehaviour
     {
         // Debug.Log("Following Bundles are loaded:");
         // foreach(AssetBundle b in AssetBundle.GetAllLoadedAssetBundles()){
-            // Debug.Log(b.ToString());
+        // Debug.Log(b.ToString());
         // }
-        
+
         if (!myInstance)
             myInstance = this;
-        
+
         mapManagerInstance = this.gameObject.GetComponentInChildren<MapManager>();
         guiManagerInstance = this.gameObject.GetComponentInChildren<GUIManager>();
         PlayerRadarStations = 0;
@@ -145,7 +169,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && guiManagerInstance.selectedUnit)
         {
             //if (GUI._selectedUnitGeneric && GUI._selectedUnitGeneric.AudioSettings.moveQuotes.Length > 0)
-                //playRandomQuote(GUI._selectedUnitGeneric.AudioSettings.moveQuotes, Audio.quoteAudioSource);
+            //playRandomQuote(GUI._selectedUnitGeneric.AudioSettings.moveQuotes, Audio.quoteAudioSource);
 
             if (gu && gu.UnitSettings.canMove)
             {
@@ -155,7 +179,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-  
+
     void drawMainCameraPositionOnMiniMap()
     {
         //GUI._unitFollowerProjectionObject;
@@ -182,7 +206,7 @@ public class GameManager : MonoBehaviour
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
+
         if (Physics.Raycast(ray, out hit))
         {
             gu.moveTargetPoint.Set(hit.point.x, transform.position.y, hit.point.z);
@@ -230,6 +254,6 @@ public class GameManager : MonoBehaviour
         guiManagerInstance.selectedUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
- 
+
 
 }
