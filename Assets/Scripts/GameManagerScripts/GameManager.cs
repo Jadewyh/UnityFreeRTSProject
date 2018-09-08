@@ -10,13 +10,26 @@ public delegate void newPlayerJoined(PlayerHandler p);
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager myInstance;
+
+    public GameObject newUnitHierarchyParentObject;
+
+    [ReadOnly] private List<PlayerHandler> playersInGame;
+    [ReadOnly] public MapManager mapManagerInstance;
+    [ReadOnly] public GUIManager guiManagerInstance;
+    [ReadOnly] public PlayerHandler UIPlayer;
+    public event newPlayerJoined OnPlayerJoin;
+    public bool hasStarted = false;
+
     public void returnToMainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("TitleMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     public void startGame()
     {
+        if (!mapManagerInstance.mapGen.TerrainObject) return;
+        GameObject.Find("MapConfigScreen").GetComponentInChildren<PlayerSelectOptionsGenerator>().convertPlayerSelectsToPlayers();
         mapManagerInstance.generateAI();
         foreach (PlayerHandler p in playersInGame)
         {
@@ -28,21 +41,33 @@ public class GameManager : MonoBehaviour
             {
 
                 GameObject obj = GameObject.Instantiate(o, spawningPoint, Quaternion.identity);
+                if (!obj)
+                {
+                    Debug.LogError("Instantiating of object " + o.name + " failed!");
+                    return;
+                }
+                if (!p.playerObjectSpawnParent)
+                {
+                    Debug.LogError("SpawnParent of player " + p.playerName + " not set!");
+                    return;
+                }
                 obj.transform.parent = p.playerObjectSpawnParent.transform;
+                foreach (GenericUnit u in obj.GetComponentsInChildren<GenericUnit>())
+                {
+                    u.owner = p;
+                }
+                foreach (MeshRenderer m in obj.GetComponentsInChildren<MeshRenderer>())
+                {
+                    m.materials = new Material[] { p.playerMaterial };
+
+                }
             }
         }
+        GameObject.Find("MapConfigScreen").SetActive(false);
+        mapManagerInstance.TerrainRestriction = mapManagerInstance.mapGen.terrainSize;
+        hasStarted = true;
+
     }
-    public static GameManager myInstance;
-
-    public GameObject newUnitHierarchyParentObject;
-
-    [ReadOnly] private List<PlayerHandler> playersInGame;
-
-    [ReadOnly] public MapManager mapManagerInstance;
-    [ReadOnly] public GUIManager guiManagerInstance;
-
-    [ReadOnly] public PlayerHandler UIPlayer;
-    public event newPlayerJoined onPlayerJoin;
 
     public void addNewPlayer(PlayerHandler p)
     {
@@ -55,7 +80,7 @@ public class GameManager : MonoBehaviour
     }
     public PlayerHandler[] getAllPlayers()
     {
-        if (playersInGame == null) return null;
+        if (playersInGame == null) return new PlayerHandler[0];
         return playersInGame.ToArray();
     }
 
@@ -135,6 +160,7 @@ public class GameManager : MonoBehaviour
         guiManagerInstance = this.gameObject.GetComponentInChildren<GUIManager>();
         PlayerRadarStations = 0;
         guiManagerInstance.selectedUnit = null;
+        playersInGame = new List<PlayerHandler>();
     }
 
 

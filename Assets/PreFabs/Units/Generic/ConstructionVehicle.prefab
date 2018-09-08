@@ -100,8 +100,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1393039798337258}
-  m_LocalRotation: {x: 0.000009414775, y: -0.000071571434, z: 0.005404614, w: 0.9999854}
-  m_LocalPosition: {x: 45.69392, y: 0, z: 85.47159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4793711394208352}
@@ -374,25 +374,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a8112c4863a4d78bb362caf73fd59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  canCombat: 0
-  combatDamage: 0
-  combatRangeMax: 0
-  combatRangeMin: 0
-  currentHealth: 0
+  AudioSettings:
+    selectQuotes: []
+    moveQuotes: []
+    attackQuotes: []
+    dyingQuotes: []
+    createQuotes: []
+  UnitSettings:
+    combatDamage: 0
+    maxHealth: 100
+    combatRangeMax: 0
+    combatRangeMin: 0
+    maxMovementSpeed: 100
+    canMove: 1
+    canCombat: 0
+  currentHealth: 100
   movementSpeed: 100
-  maxMovementSpeed: 100
   availableConstructionObjects:
   - {fileID: 114142294740542026, guid: 6090c6a94678b4ff88486015bb86db7b, type: 2}
   constructionObjectSpawnPoint: {x: 0, y: 0, z: 0}
   isMoving: 0
-  canMove: 1
+  isSelected: 0
   moveTargetPoint: {x: 0, y: 0, z: 0}
-  selectQuotes: []
-  moveQuotes: []
-  attackQuotes: []
-  dyingQuotes: []
-  createQuotes: []
   hyp: 0
   angle: {x: 0, y: 0, z: 0, w: 0}
   targetpos: {x: 0, y: 0, z: 0}

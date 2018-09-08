@@ -24,9 +24,6 @@ public class MapGenerator : MonoBehaviour
     public GameObject CanvasDisplay;
     public GameObject CanvasRawImageObject;
 
-    /*public GameObject GameManagerInstance;
-    public GameObject GameManagerPrefab;*/
-
     void Start()
     {
 
@@ -46,23 +43,11 @@ public class MapGenerator : MonoBehaviour
         GameObject.DestroyImmediate(TerrainObject.GetComponent<TerrainCollider>());
         GameObject.DestroyImmediate(TerrainObject.GetComponent<Terrain>());
 
-        /*if (GameManagerInstance)
-            GameObject.DestroyImmediate(GameManagerInstance);
-
-        GameManagerInstance = GameObject.Instantiate(GameManagerPrefab);*/
-
     }
 
     public void generateTerrainObject(bool genMesh = false)
     {
         CleanUp();
-        /*
-        if (useTestTerrain)
-        {
-
-            //testTerrain();
-            return;
-		}*/
 
         // Creation of objects
         TerrainData _TerrainData = new TerrainData();
@@ -112,7 +97,7 @@ public class MapGenerator : MonoBehaviour
                     amap[i, j, k] = 0;
             }
 
-        Debug.Log(string.Format("Alphamap: {0} {1} | Heightmap: {2} {3}", _TerrainData.alphamapHeight, _TerrainData.alphamapWidth, _heightmapWidth, _heightmapHeight));
+        //Debug.Log(string.Format("Alphamap: {0} {1} | Heightmap: {2} {3}", _TerrainData.alphamapHeight, _TerrainData.alphamapWidth, _heightmapWidth, _heightmapHeight));
         _TerrainData.SetAlphamaps(0, 0, amap);
 
         float lowestPoint = float.MaxValue;
@@ -257,32 +242,9 @@ public class MapGenerator : MonoBehaviour
         float z = quant.z * Mathf.Floor(v.z / quant.z);
         return new Vector3(x, y, z);
     }
-    public NavMeshData nmd;
+
     public void generateNavMesh()
     {
-
-        /*UnityEngine.AI.NavMesh.RemoveAllNavMeshData();
-        nmd =  new NavMeshData(0);
-        
-        UnityEngine.AI.NavMeshBuildSettings b = NavMesh.GetSettingsByIndex(0);
-        Debug.Log("Building for: "+NavMesh.GetSettingsNameFromID(b.agentTypeID));   
-        UnityEngine.AI.NavMeshBuildSource bs = new UnityEngine.AI.NavMeshBuildSource();
-        Terrain t = TerrainObject.GetComponent<Terrain>();
-        bs.shape = NavMeshBuildSourceShape.Terrain;
-        bs.sourceObject = t;
-        bs.transform = Matrix4x4.TRS(t.transform.position, Quaternion.identity, Vector3.one);
-        bs.area = 0;
-        List<NavMeshBuildSource> nmbs = new List<UnityEngine.AI.NavMeshBuildSource>(new UnityEngine.AI.NavMeshBuildSource[]{bs});
-        
-        nmd = UnityEngine.AI.NavMeshBuilder.BuildNavMeshData(b,nmbs,new Bounds(Vector3.zero, t.transform.position),t.transform.position,Quaternion.identity);
-        NavMesh.AddNavMeshData(nmd);
-        AsyncOperation o = UnityEngine.AI.NavMeshBuilder.UpdateNavMeshDataAsync(nmd,b,nmbs,new Bounds(Quantize(t.gameObject.transform.position, 0.1f * new Vector3(80.0f, 20.0f, 80.0f)), new Vector3(80.0f, 20.0f, 80.0f)));
-        Debug.Log("Mesh Generation started.");
-        o.completed += MeshFinished;
-        
-        foreach (NavMeshAgent a in this.transform.root.GetComponentsInChildren<NavMeshAgent>()){
-            
-        }*/
         NavMeshSurface nms = TerrainObject.GetComponent<NavMeshSurface>();
         if (nms == null)
         {
@@ -291,16 +253,6 @@ public class MapGenerator : MonoBehaviour
         }
         nms.layerMask = LayerMask.GetMask(new string[]{"Terrain"});
         nms.BuildNavMesh();
-
-        //UnityEngine.AI.NavMeshData nmd = UnityEngine.AI.NavMeshBuilder.BuildNavMeshData(b,new List<UnityEngine.AI.NavMeshBuildSource>(new UnityEngine.AI.NavMeshBuildSource[]{bs}),new Bounds(new Vector3(0,0,0),new Vector3(100,100,100)),new Vector3(0,0,0),Quaternion.identity);
-
-
-
-    }
-    public void MeshFinished(AsyncOperation a)
-    {
-        Debug.Log("Mesh finished generating!");
-        UnityEngine.AI.NavMesh.AddNavMeshData(nmd);
     }
 
     [System.Serializable]

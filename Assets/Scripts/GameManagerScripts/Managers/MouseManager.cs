@@ -20,7 +20,7 @@ public enum MoveDirection
 
 public class MouseManager : MonoBehaviour
 {
-	[System.Serializable]
+    [System.Serializable]
     public class assignableFields
     {
         public Texture2D defaultCursorNoSelect;
@@ -36,32 +36,32 @@ public class MouseManager : MonoBehaviour
         public Texture2D moveCursorUpRight;
 
 
-		public float CursorMovementSpeed;
+        public float CursorMovementSpeed;
         public float windowBorderDistance;
         public CursorMode cursorMode;
 
 
     }
-	
-	[System.Serializable]
+
+    [System.Serializable]
     public class values
     {
         public Vector2 cursorHotSpotMouse;
         public MoveDirection currentMouseMoveDirection = 0;
         public Vector2 mouseTargetPosition;
-		public GameManager gameManager;
-		public MapManager mapManager;
-		
-		   public Vector2 selectionBoxStartPoint;
-    public Vector2 selectionBoxEndPoint;
-    public RectTransform selectionBoxRect;
-    public Image selectionBoxImage;
-       public bool selectionBoxActive;
-	    public GameObject _selectionBox;
+        public GameManager gameManager;
+        public MapManager mapManager;
+
+        public Vector2 selectionBoxStartPoint;
+        public Vector2 selectionBoxEndPoint;
+        public RectTransform selectionBoxRect;
+        public Image selectionBoxImage;
+        public bool selectionBoxActive;
+        public GameObject _selectionBox;
 
 
     }
-public GameObject selectionBox
+    public GameObject selectionBox
     {
         get
         {
@@ -74,45 +74,53 @@ public GameObject selectionBox
             Values.selectionBoxRect = value.GetComponent<RectTransform>();
             Values.selectionBoxImage = value.GetComponent<Image>();
         }
-    } 
+    }
 
-	[ReadOnly] public values Values;
-	public assignableFields AssignableFields;	
-	
+    [ReadOnly] public values Values;
+    [ReadOnly] public float screenWidthInUnits;
+    [ReadOnly] public float screenHeightInUnits;
+    public assignableFields AssignableFields;
+
     // Use this for initialization
     void Start()
     {
 
-		Values.mapManager = transform.GetComponent<MapManager>();
-		Values.gameManager = transform.GetComponent<GameManager>();
-		if (!selectionBox){
+        Values.mapManager = transform.GetComponent<MapManager>();
+        Values.gameManager = transform.GetComponent<GameManager>();
+        if (!selectionBox)
+        {
             selectionBox = GameObject.Find("MouseManager_SelectionBox");
         }
-        
+
+        screenHeightInUnits = Camera.main.orthographicSize * 2;
+        screenWidthInUnits = screenHeightInUnits * Screen.width / Screen.height;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!Values.gameManager.hasStarted) return;
         if (!selectionBox) return;
- // If the user right-clicks after selecting a unit, selection is toggled off and the default cursor is back.
+        // If the user right-clicks after selecting a unit, selection is toggled off and the default cursor is back.
         if (Input.GetMouseButtonDown(1) && Values.gameManager.guiManagerInstance.hasSomethingSelected)
         {
             Cursor.SetCursor(AssignableFields.defaultCursorNoSelect, Values.mouseTargetPosition, AssignableFields.cursorMode);
             Values.gameManager.guiManagerInstance.selectedUnit = null;
         }
-		
+
     }
 
-	// fixed is enough for our load
-	private void FixedUpdate() {
-        
-        if (!selectionBox) return;
-		UpdateRTSCamera();
-	}
+    // fixed is enough for our load
+    private void FixedUpdate()
+    {
+        if (!Values.gameManager.hasStarted) return;
 
-	/// <summary>
+        if (!selectionBox) return;
+        UpdateRTSCamera();
+    }
+
+    /// <summary>
     /// Helper Function to set the cursor
     /// </summary>
     /// <param name="cursor">The Cursor</param>
@@ -124,7 +132,7 @@ public GameObject selectionBox
         Values.cursorHotSpotMouse = hotSpot;
         Cursor.SetCursor(cursor, Values.cursorHotSpotMouse, AssignableFields.cursorMode);
     }
-
+    public Vector3 localPos = Vector3.zero;
 
     /// <summary>
     /// Update / Move Real Time Stretegy Camera
@@ -177,13 +185,13 @@ public GameObject selectionBox
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
-            Camera.main.GetComponent<Camera>().orthographicSize -= AssignableFields.CursorMovementSpeed  * Time.deltaTime;
+            Camera.main.GetComponent<Camera>().orthographicSize -= AssignableFields.CursorMovementSpeed * Time.deltaTime;
             //drawMainCameraPositionOnMiniMap();
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0f)
         {
-            Camera.main.GetComponent<Camera>().orthographicSize += AssignableFields.CursorMovementSpeed  * Time.deltaTime;
+            Camera.main.GetComponent<Camera>().orthographicSize += AssignableFields.CursorMovementSpeed * Time.deltaTime;
             //drawMainCameraPositionOnMiniMap();
         }
 
@@ -215,40 +223,44 @@ public GameObject selectionBox
             {
                 splitDir.Add(MoveDirection.Left);
             }
+            //Debug.Log("Ding: "+);
+
             foreach (MoveDirection m in splitDir)
             {
                 //float zVal = Camera.main.transform.position.z;
                 switch (m)
                 {
                     case MoveDirection.Right:
-                        if (Camera.main.gameObject.transform.position.x <= Values.mapManager.TerrainRestriction.x)
+                        if (Camera.main.transform.position.x < (Values.gameManager.mapManagerInstance.mapGen.TerrainObject.GetComponent<Terrain>().terrainData.size.x - (screenWidthInUnits / 2 - 5)))
+                            //if (Camera.main.gameObject.transform.position.x <= Values.mapManager.TerrainRestriction.x)
                             Camera.main.transform.Translate(x: 2 * AssignableFields.CursorMovementSpeed * Time.deltaTime, y: 0, z: 0);
                         //drawMainCameraPositionOnMiniMap();
                         break;
                     case MoveDirection.Left:
-                        if (Camera.main.gameObject.transform.position.x >= 0)
+                        //if (Camera.main.gameObject.transform.position.x >= 0)
+                        if (Camera.main.transform.position.x > (screenWidthInUnits / 2 - 5))
                             Camera.main.transform.Translate(x: -2 * AssignableFields.CursorMovementSpeed * Time.deltaTime, y: 0, z: 0);
                         //drawMainCameraPositionOnMiniMap();
                         break;
+
                     case MoveDirection.Up:
-                        if (Camera.main.transform.localPosition.z <= Values.mapManager.TerrainRestriction.z)
-                            Camera.main.transform.Translate(0, 0, 2 * AssignableFields.CursorMovementSpeed * Time.deltaTime, Space.World);
-                        //drawMainCameraPositionOnMiniMap();
+                        if (Camera.main.transform.position.z < (Values.gameManager.mapManagerInstance.mapGen.TerrainObject.GetComponent<Terrain>().terrainData.size.z - Camera.main.transform.position.y - screenHeightInUnits / 2 - 5))
+                        {
+                            Camera.main.transform.Translate(0f, 0f, 2 * AssignableFields.CursorMovementSpeed * Time.deltaTime, Space.World);
+                        }
                         break;
                     case MoveDirection.Down:
-                        if (Camera.main.transform.localPosition.z > 0)
-                            Camera.main.transform.Translate(0, 0, -2 * AssignableFields.CursorMovementSpeed * Time.deltaTime, Space.World);
-                        //drawMainCameraPositionOnMiniMap();
-                        break;
-                    default:
+                        if (Camera.main.transform.position.z > ((-1) * Camera.main.transform.position.y + (screenHeightInUnits / 2) + 5))
+                            Camera.main.transform.Translate(0f, -0f, -2 * AssignableFields.CursorMovementSpeed * Time.deltaTime, Space.World);
                         break;
                 }
             }
         }
     }
-	
+
     private void LateUpdate()
     {
+        if (!Values.gameManager.hasStarted) return;
         if (!selectionBox) return;
         if (!Values.gameManager.guiManagerInstance.hasSomethingSelected && Input.GetMouseButton(0))
         {
@@ -279,6 +291,7 @@ public GameObject selectionBox
         {
             foreach (GenericUnit g in GetComponentsInChildren<GenericUnit>())
             {
+                if (g.owner != Values.gameManager.UIPlayer) continue;
                 Vector2 unitscreenpos = Camera.main.WorldToScreenPoint(g.transform.position);
                 if ((unitscreenpos.x >= Values.selectionBoxStartPoint.x && unitscreenpos.y >= Values.selectionBoxStartPoint.y && unitscreenpos.x <= Values.selectionBoxEndPoint.x
                     && unitscreenpos.y <= Values.selectionBoxEndPoint.y) || (unitscreenpos.x >= Values.selectionBoxStartPoint.x && unitscreenpos.y <= Values.selectionBoxStartPoint.y && unitscreenpos.x <= Values.selectionBoxEndPoint.x

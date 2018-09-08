@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GUIManager : MonoBehaviour {
 
-		public string UnitFollowCameraObjectName = "GameManager_MiniMapCamera";
+		public string UnitFollowCameraObjectName = "GameManager_SelectedUnitFollowerCamera";
 		public string UnitFollowDisplayObjectName = "GameManager_SelectedUnitDisplay";
 		public string resourceDisplayObjectName = "GameManager_CashResourceDisplayText";
 		public string bottomMiddleContainerObjectName = "GameManager_MiddlePanelForButtons";
@@ -82,7 +82,7 @@ public GameObject selectedUnit
 		UI_miniMapContainerObject = GameObject.Find(miniMapContainerObjectName);
         UI_ResourceDisplayText = UI_ResourceDisplay.GetComponent<Text>();
         UI_UnitFollowerCamera = UI_UnitFollowerCameraObject.GetComponent<Camera>();
-        UI_UnitFollowerCameraObject.SetActive(false);
+        //UI_UnitFollowerCameraObject.SetActive(false);
 	}
 	
 	// Update is called once per frame

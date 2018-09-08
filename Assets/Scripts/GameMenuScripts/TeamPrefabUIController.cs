@@ -31,10 +31,11 @@ public class TeamPrefabUIController : MonoBehaviour
                     break;
             }
         }
-
+        controlActiveFields();
     }
 
 	public void controlActiveFields(){
+        if (!mySlotDropDown) return;
 		if (mySlotDropDown.GetComponent<Dropdown>().value == 2){
 			myColorDropDown.SetActive(false);
 			myFractionDropDown.SetActive(false);

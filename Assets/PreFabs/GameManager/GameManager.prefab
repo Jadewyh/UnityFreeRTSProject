@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 81737113442288162}
   m_Layer: 0
   m_Name: GameManager_SelectedUnitFollowerCamera
-  m_TagString: Untagged
+  m_TagString: UnitFollower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 81350343997600424}
   m_Layer: 0
   m_Name: GameManager_MiniMapCamera
-  m_TagString: Untagged
+  m_TagString: MiniMap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -695,6 +695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TerrainRestriction: {x: 0, y: 0, z: 0}
+  mapGen: {fileID: 0}
 --- !u!114 &114275780289492924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -732,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e96fdc5468095481fbe8bfbc46d7ddcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitFollowCameraObjectName: GameManager_MiniMapCamera
+  UnitFollowCameraObjectName: GameManager_SelectedUnitFollowerCamera
   UnitFollowDisplayObjectName: GameManager_SelectedUnitDisplay
   resourceDisplayObjectName: GameManager_CashResourceDisplayText
   bottomMiddleContainerObjectName: GameManager_MiddlePanelForButtons
@@ -744,6 +745,7 @@ MonoBehaviour:
   UI_UnitFollowerCamera: {fileID: 0}
   UI_ResourceDisplayText: {fileID: 0}
   UI_bottomMiddleContainer: {fileID: 0}
+  selectedUnits: []
 --- !u!114 &114312840835024442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -778,14 +780,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7401e5ede39b4704b858fb3187e671f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resources: 0
-  _PlayerRaderStations: 0
+  newUnitHierarchyParentObject: {fileID: 1679339684723442}
   mapManagerInstance: {fileID: 0}
   guiManagerInstance: {fileID: 0}
-  GUI:
-    newUnitHierarchyParentObject: {fileID: 1679339684723442}
-    targetPosition: {x: 0, y: 0, z: 0}
-  selectedUnits: []
+  UIPlayer: {fileID: 0}
+  hasStarted: 0
 --- !u!114 &114338453191468422
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -836,6 +835,8 @@ MonoBehaviour:
     selectionBoxImage: {fileID: 0}
     selectionBoxActive: 0
     _selectionBox: {fileID: 0}
+  screenWidthInUnits: 0
+  screenHeightInUnits: 0
   AssignableFields:
     defaultCursorNoSelect: {fileID: 2800000, guid: 4f019b9dce33056469447d9125d1bdc0,
       type: 3}
@@ -854,6 +855,7 @@ MonoBehaviour:
     CursorMovementSpeed: 100
     windowBorderDistance: 100
     cursorMode: 0
+  localPos: {x: 0, y: 0, z: 0}
 --- !u!114 &114520738756685446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -906,7 +908,6 @@ MonoBehaviour:
   spawnBase: {fileID: 1393039798337258, guid: 578e019535f1f46f9b762fc6d66bba3d, type: 2}
   CanvasDisplay: {fileID: 0}
   CanvasRawImageObject: {fileID: 0}
-  nmd: {fileID: 0}
 --- !u!114 &114572782680285420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -992,6 +993,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2bb7cc516b2d4c1889fa1b6221f7254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterSource: {fileID: 0}
+  musicAudioSource: {fileID: 0}
+  dialogAudioSource: {fileID: 0}
+  voicesAudioSource: {fileID: 0}
+  sfxAudioSource: {fileID: 0}
 --- !u!114 &114632483603150354
 MonoBehaviour:
   m_ObjectHideFlags: 1

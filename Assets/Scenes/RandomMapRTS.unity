@@ -189,8 +189,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1127830718}
-        m_MethodName: generateTerrainObject
+      - m_Target: {fileID: 1127830716}
+        m_MethodName: generateMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -692,7 +692,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 130044718}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1690283600}
+        m_MethodName: startGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &130044718
@@ -3412,10 +3423,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c95d67db5ab114d3b81655bb8d4499ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberOfPlayers: 3
   PrefabForPlayerConfig: {fileID: 1170946369476160, guid: 47a96be372757410597beb5ed7e28ce5,
     type: 2}
   targetObjectForDisplay: {fileID: 976090114}
-  numberOfPlayers: 10
+  playerConfig: {fileID: 1058058398}
+  additionalPlayerConfig: []
+  listOfSpawnObjects:
+  - {fileID: 1393039798337258, guid: 578e019535f1f46f9b762fc6d66bba3d, type: 2}
+  materials:
+  - {fileID: 2100000, guid: 08ec79cc467034c2cbf15bf351ef792c, type: 2}
+  - {fileID: 2100000, guid: c9be627cd10dc4e54b2891c730b27382, type: 2}
+  - {fileID: 2100000, guid: dce7c0f4522db4f70b1942e00551f002, type: 2}
 --- !u!1 &1029029214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3761,7 +3780,7 @@ GameObject:
   - component: {fileID: 1058069798}
   m_Layer: 5
   m_Name: MapConfigScreen_PreviewMinimap
-  m_TagString: MiniMap
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3940,36 +3959,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
---- !u!1 &1127830711 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1532468632244580, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
+--- !u!114 &1127830716 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114221045238383958, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
     type: 2}
   m_PrefabInternal: {fileID: 1690283599}
---- !u!114 &1127830712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1127830711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb095960076634667988aa06fda20048, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerName: SpiegelEiXXL
-  playerColor: {r: 1, g: 1, b: 1, a: 1}
-  playerFraction: 0
-  currentResources: 1000
-  currentRadars: 0
-  isFrontendPlayer: 1
-  playerOwnedObjects: []
-  gameManagerInstance: {fileID: 0}
---- !u!114 &1127830718 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114520738756685446, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
-    type: 2}
-  m_PrefabInternal: {fileID: 1690283599}
-  m_Script: {fileID: 11500000, guid: c0869b7f046d34810a1f8761e2cd41d1, type: 3}
+  m_Script: {fileID: 11500000, guid: cb1226d5849af406ab62cf83ca2baba7, type: 3}
 --- !u!1 &1137519504
 GameObject:
   m_ObjectHideFlags: 0
@@ -5188,11 +5183,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114330940709267414, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
-        type: 2}
-      propertyPath: playersInGame.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4616893462804318, guid: f6a4ae1ea999f48ccaf4f9b70b905b79, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5225,16 +5215,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114330940709267414, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
-        type: 2}
-      propertyPath: newUnitHierarchyParentObject
-      value: 
-      objectReference: {fileID: 1829222912}
-    - target: {fileID: 114330940709267414, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
-        type: 2}
-      propertyPath: playersInGame.Array.data[0]
-      value: 
-      objectReference: {fileID: 1127830712}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6a4ae1ea999f48ccaf4f9b70b905b79, type: 2}
   m_IsPrefabAsset: 0
@@ -5501,11 +5481,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1802204157}
   m_CullTransparentMesh: 0
---- !u!1 &1829222912 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1679339684723442, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
-    type: 2}
-  m_PrefabInternal: {fileID: 1690283599}
 --- !u!1 &1835632825
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 33100209425117378}
   - component: {fileID: 23006771529484392}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Text_dup_dup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

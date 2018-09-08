@@ -7,6 +7,7 @@ public class MapManager : MonoBehaviour {
 	[ReadOnly] public MapGenerator mapGen;
 	public void generateMap(){
 		mapGen.generateTerrainObject();
+        this.TerrainRestriction = mapGen.terrainSize;
 	}
 
 	public void generateAI(){

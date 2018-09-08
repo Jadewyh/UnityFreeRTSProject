@@ -31,23 +31,25 @@ public class GenericUnit : MonoBehaviour
 
     public float currentHealth;
     public float movementSpeed = 1f;
+    public PlayerHandler owner;
 
     // For example: Buildings or drone bots
     public GenericConstructionObject[] availableConstructionObjects;
-    public Vector3 constructionObjectSpawnPoint;
+    [ReadOnly] public Vector3 constructionObjectSpawnPoint;
 
-    public bool isMoving;
-    public bool isSelected;
+    [ReadOnly] public bool isMoving;
+    [ReadOnly] public bool isSelected;
 
-    public Vector3 moveTargetPoint;
+    [ReadOnly] public Vector3 moveTargetPoint;
 
-    private GameManager gameManager;
-    private Transform _destination;
-    private UnityEngine.AI.NavMeshAgent agent;
-    public double hyp;
-    public Quaternion angle;
-    private Vector3 _direction;
-    public Vector3 targetpos;
+    [ReadOnly] public GameManager gameManager;
+    [ReadOnly] public Transform _destination;
+    [ReadOnly] public UnityEngine.AI.NavMeshAgent agent;
+    [ReadOnly] public double hyp;
+    [ReadOnly] public Quaternion angle;
+    [ReadOnly] public Vector3 _direction;
+    [ReadOnly] public Vector3 targetpos;
+
 
     // Use this for initialization
     void Start()
@@ -70,7 +72,8 @@ public class GenericUnit : MonoBehaviour
     //OnMouseDown is called when the user clicks on the unit, thus toggling selection and changing the cursor...
     void OnMouseDown()
     {
-        gameManager.guiManagerInstance.selectedUnit = this.gameObject;
+        if (this.owner == gameManager.UIPlayer)
+            gameManager.guiManagerInstance.selectedUnit = this.gameObject;
 
     }
     void Update()
@@ -97,7 +100,9 @@ public class GenericUnit : MonoBehaviour
         agent.SetDestination(targetpos);
         _direction = (agent.steeringTarget - transform.position).normalized;
 
-        angle = Quaternion.LookRotation(_direction);
+        if (_direction != Vector3.zero)
+            angle = Quaternion.LookRotation(_direction);
+
         transform.rotation = Quaternion.Slerp(transform.rotation, angle, 0);
         
     }
