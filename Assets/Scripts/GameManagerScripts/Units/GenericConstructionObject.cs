@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GenericConstructionObject: MonoBehaviour
 {
-    public Mesh ButtonDisplay;
     public float resourceCost;
     public GameObject CreationObject;
-    public GameManager gameManager;
+    [ReadOnlyAttribute] public GameManager gameManager;
     private Button myButton;
 
     // Use this for initialization

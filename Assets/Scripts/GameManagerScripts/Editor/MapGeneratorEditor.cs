@@ -5,7 +5,8 @@ using UnityEditor;
 public class MapGeneratorEditor : Editor {
     public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
-        MapGenerator myScript = (MapGenerator)target;
+        DrawDefaultInspector();
+        /*MapGenerator myScript = (MapGenerator)target;
             
         if (DrawDefaultInspector()){
             if (myScript.autoUpdateInUnity)
@@ -23,6 +24,6 @@ public class MapGeneratorEditor : Editor {
         if(GUILayout.Button("NavMesh Generation"))
         {
             myScript.generateNavMesh();
-        }
+        }*/
     }
 }

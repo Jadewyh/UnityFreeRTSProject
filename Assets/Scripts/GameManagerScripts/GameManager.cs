@@ -33,9 +33,9 @@ public class GameManager : MonoBehaviour
         mapManagerInstance.generateAI();
         foreach (PlayerHandler p in playersInGame)
         {
-            var spawningPoint = new Vector3(UnityEngine.Random.value * mapManagerInstance.TerrainRestriction.x,
-                                           UnityEngine.Random.value * mapManagerInstance.TerrainRestriction.y,
-                                            UnityEngine.Random.value * mapManagerInstance.TerrainRestriction.z);
+            var spawningPoint = new Vector3(UnityEngine.Random.value * mapManagerInstance.mapGen.TerrainObject.GetComponent<Terrain>().terrainData.size.x,
+                                           UnityEngine.Random.value * mapManagerInstance.mapGen.TerrainObject.GetComponent<Terrain>().terrainData.size.y,
+                                            UnityEngine.Random.value * mapManagerInstance.mapGen.TerrainObject.GetComponent<Terrain>().terrainData.size.z);
 
             foreach (GameObject o in p.playerInitialSpawnObjects)
             {
@@ -120,27 +120,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-
-    /// <summary>
-    /// Helper Method to create the Action Buttons
-    /// </summary>
-    // void setConstructionObjects()
-    // {
-    //     if (!GUI.constructionObjectContainer) return;
-    //     foreach (Button b in GUI.constructionObjectContainer.GetComponentsInChildren<Button>())
-    //     {
-    //         Destroy(b.gameObject);
-    //     }
-    //     if (GUI._selectedUnit)
-    //     {
-    //         foreach (GenericConstructionObject gco in GUI._selectedUnit.GetComponentInChildren<GenericUnit>().availableConstructionObjects)
-    //         {
-    //             GameObject go = Instantiate(gco.gameObject);
-    //             go.transform.SetParent(GUI.constructionObjectContainer.transform);
-    //         }
-    //     }
-    // }
 
     /// <summary>
     /// Initializes GameManager
@@ -236,6 +215,11 @@ public class GameManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             gu.moveTargetPoint.Set(hit.point.x, transform.position.y, hit.point.z);
+            NavMeshDisplay d = GetComponentInChildren<NavMeshDisplay>();
+            if (d != null)
+            {
+                d.target = gu.moveTargetPoint;
+            }
             gu.isMoving = true;
 
 
@@ -247,13 +231,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="callee">Calling GenericConstructionObject</param>
     /// <param name="ignoreCosts">ignores the costs (for example via cinematic scene)</param>
-    public void spawnObject(GenericConstructionObject callee, bool ignoreCosts = false)
+    public void spawnObject(GenericConstructionObject callee, bool ignoreCosts = false, PlayerHandler p = null)
     {
-        if (UIPlayer.currentResources - callee.resourceCost >= 0 || ignoreCosts)
+        if (p == null) p = UIPlayer;
+        if (p.currentResources - callee.resourceCost >= 0 || ignoreCosts)
         {
             GameObject o = GameObject.Instantiate(callee.CreationObject, guiManagerInstance.selectedUnit.transform.position, Quaternion.identity);
             o.transform.Translate(0, 0, -1 * (callee.transform.forward.z + 2f));
-            configureGameObject(o);
+            configureGameObject(o, p);
 
             if (!ignoreCosts)
                 this.Resources = this.Resources - (int)callee.resourceCost;
@@ -266,18 +251,46 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Spawns a Objects from a ConsturctionObject
+    /// </summary>
+    /// <param name="callee">Calling GenericConstructionObject</param>
+    /// <param name="ignoreCosts">ignores the costs (for example via cinematic scene)</param>
+    public void spawnObject(ObjectBuildCostObject callee, bool ignoreCosts = false, PlayerHandler p = null)
+    {
+        if (p == null) p = UIPlayer;
+        if (p.currentResources - callee.resourceCost >= 0 || ignoreCosts)
+        {
+            GameObject o = GameObject.Instantiate(callee.objectToInstanciate, guiManagerInstance.selectedUnit.transform.position, Quaternion.identity);
+            o.transform.Translate(0, 0, -1 * (callee.transform.forward.z + 2f));
+            configureGameObject(o, p);
+
+            if (!ignoreCosts)
+                this.Resources = this.Resources - (int)callee.resourceCost;
+        }
+        else
+        {
+            // not enough resources
+            //Audio.infoAudioSource.PlayOneShot(Audio.AudioQueueStatus.notEnoughResources);
+        }
+    }
+
+
+    /// <summary>
     /// Configures an object and sets the parent accordingly to GameManager
     /// </summary>
     /// <param name="o">Object to configure</param>
-    public void configureGameObject(GameObject o)
+    public void configureGameObject(GameObject o, PlayerHandler p)
     {
-        if (newUnitHierarchyParentObject)
-            o.transform.parent = newUnitHierarchyParentObject.transform;
+        //if (newUnitHierarchyParentObject)
+        //    o.transform.parent = newUnitHierarchyParentObject.transform;
+        if (p.gameObjectSpawnParentName != "")
+            o.transform.parent = p.playerObjectSpawnParent.transform;
         else
             o.transform.parent = this.gameObject.transform;
 
         o.GetComponent<Rigidbody>().velocity = Vector3.zero;
         guiManagerInstance.selectedUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
     }
 
 

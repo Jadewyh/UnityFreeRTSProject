@@ -5215,6 +5215,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114520738756685446, guid: f6a4ae1ea999f48ccaf4f9b70b905b79,
+        type: 2}
+      propertyPath: impacts.Array.data[0].textureArrayIndex
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6a4ae1ea999f48ccaf4f9b70b905b79, type: 2}
   m_IsPrefabAsset: 0

@@ -57,6 +57,7 @@ public GameObject selectedUnit
                 selectedUnits.Remove(value);
             }
             UI_unitFollowerDisplayObject.SetActive(value?true:false);
+            setUnitActionButtons();
             // setConstructionObjects();
         }
     }
@@ -89,4 +90,23 @@ public GameObject selectedUnit
 	void Update () {
 		
 	}
+
+    public void setUnitActionButtons()
+    {
+
+        if (!UI_bottomMiddleContainer) return;
+        foreach (Button b in UI_bottomMiddleContainer.GetComponentsInChildren<Button>())
+        {
+            Destroy(b.gameObject);
+        }
+        if (hasSomethingSelected)
+        {
+            foreach (GenericConstructionObject gco in selectedUnit.GetComponentInChildren<GenericUnit>().availableConstructionObjects)
+            {
+                GameObject go = Instantiate(gco.gameObject);
+                go.transform.SetParent(UI_bottomMiddleContainer.transform);
+            }
+        }
+    }
+
 }
