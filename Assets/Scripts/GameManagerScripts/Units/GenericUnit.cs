@@ -2,46 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class GenericUnitAudio
+public class GenericUnit : MonoBehaviour
 {
-    public UnityEngine.AudioClip[] selectQuotes;
-    public UnityEngine.AudioClip[] moveQuotes;
-    public UnityEngine.AudioClip[] attackQuotes;
-    public UnityEngine.AudioClip[] dyingQuotes;
-    public UnityEngine.AudioClip[] createQuotes;
-}
+    [Header("Unit/Object settings")]
+    private float _currentHealth;
 
-[System.Serializable]
-public class GenericUnitSettings
-{
-    public float combatDamage;
+    public float currentHealth
+    {
+        get
+        {
+            return _currentHealth;
+        }
+        set
+        {
+            _currentHealth = value;
+            if (HPBarFilling)
+                HPBarFilling.fillAmount = _currentHealth / maxHealth;
+        }
+    }
     public float maxHealth;
+    public float combatDamage;
     public float combatRangeMax;
     public float combatRangeMin = 0f; // example are trebuchet in AoE which cannot combat unless there is a distance between attacker and receiver
+    public float movementSpeed = 1f;
     public float maxMovementSpeed = 1f;
     public bool canMove;
     public bool canCombat;
-
-}
-public class GenericUnit : MonoBehaviour
-{
-    public GenericUnitAudio AudioSettings;
-    public GenericUnitSettings UnitSettings;
-
-    public float currentHealth;
-    public float movementSpeed = 1f;
-    public PlayerHandler owner;
-
     // For example: Buildings or drone bots
-    public GenericConstructionObject[] availableConstructionObjects;
-    [ReadOnly] public Vector3 constructionObjectSpawnPoint;
+    public MiddleButtonObjects[] actionObjects;
+    public GameObject HPBar;
 
+
+    [Header("Runtime Objects (do not change)")]
+    public UnityEngine.UI.Image HPBarFilling;
+    public PlayerHandler owner;
+    [ReadOnly] public Vector3 constructionObjectSpawnPoint;
     [ReadOnly] public bool isMoving;
     [ReadOnly] public bool isSelected;
-
     [ReadOnly] public Vector3 moveTargetPoint;
-
     [ReadOnly] public GameManager gameManager;
     [ReadOnly] public Transform _destination;
     [ReadOnly] public UnityEngine.AI.NavMeshAgent agent;
@@ -49,6 +47,14 @@ public class GenericUnit : MonoBehaviour
     [ReadOnly] public Quaternion angle;
     [ReadOnly] public Vector3 _direction;
     [ReadOnly] public Vector3 targetpos;
+
+    [Header("Audio")]
+    public UnityEngine.AudioClip[] selectQuotes;
+    public UnityEngine.AudioClip[] moveQuotes;
+    public UnityEngine.AudioClip[] attackQuotes;
+    public UnityEngine.AudioClip[] dyingQuotes;
+    public UnityEngine.AudioClip[] createQuotes;
+
 
 
     // Use this for initialization
@@ -61,13 +67,25 @@ public class GenericUnit : MonoBehaviour
             if (!gameManager)
                 Debug.Log("Please add this object below gameManager!");
         }
+
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (!agent)
         {
             Debug.Log("Please add a NavMeshAgent to this object!");
-        } else {
+        }
+        else
+        {
             targetpos = agent.transform.position;
         }
+        currentHealth = maxHealth;
+
+        if (HPBar)
+            foreach (UnityEngine.UI.Image i in HPBar.GetComponentsInChildren<UnityEngine.UI.Image>())
+            {
+                if (i.name == "HPBarFilling")
+                    HPBarFilling = i;
+            }
+
     }
     //OnMouseDown is called when the user clicks on the unit, thus toggling selection and changing the cursor...
     void OnMouseDown()
@@ -78,7 +96,7 @@ public class GenericUnit : MonoBehaviour
     }
     void Update()
     {
-        if (!this.UnitSettings.canMove || !this.isMoving) return;
+        if (!this.canMove || !this.isMoving) return;
 
         hyp = System.Math.Sqrt((agent.pathEndPosition.x - transform.position.x) * (agent.pathEndPosition.x - transform.position.x)
            + (agent.pathEndPosition.y - transform.position.y) * (agent.pathEndPosition.y - transform.position.y)
@@ -104,6 +122,6 @@ public class GenericUnit : MonoBehaviour
             angle = Quaternion.LookRotation(_direction);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, angle, 0);
-        
+
     }
 }

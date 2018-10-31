@@ -2,28 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum UIDropDownSlot
-{
-    Computer = 1,
-    Free = 0,
-    Closed = 2
-}
-public enum UIDropDownColor
-{
-    Red = 0,
-    Blue = 1,
-    Green = 2,
-    White = 3,
-    Yellow = 4,
-    Cyan = 5,
-    Black = 6
-}
-public enum UIDropDownFraction
-{
-    Axis = 0,
-    Allies = 1,
-    Soviet = 2
-}
 
 public class NameParts
 {
@@ -32,6 +10,31 @@ public class NameParts
 
 public class PlayerSelectOptionsGenerator : MonoBehaviour
 {
+    [System.Serializable]
+    public enum UIDropDownSlot
+    {
+        Computer = 1,
+        Free = 0,
+        Closed = 2
+    }
+    [System.Serializable]
+    public enum UIDropDownColor
+    {
+        Red = 0,
+        Blue = 1,
+        Green = 2,
+        White = 3,
+        Yellow = 4,
+        Cyan = 5,
+        Black = 6
+    }
+    [System.Serializable]
+    public enum UIDropDownFraction
+    {
+        Axis = 0,
+        Allies = 1,
+        Soviet = 2
+    }
     public int numberOfPlayers = 2;
     public GameObject PrefabForPlayerConfig;
     public GameObject targetObjectForDisplay;
@@ -39,19 +42,10 @@ public class PlayerSelectOptionsGenerator : MonoBehaviour
     [ReadOnly] public List<GameObject> additionalPlayerConfig;
     public List<GameObject> listOfSpawnObjects;
     public Dictionary<Fraction, NameParts> namePossibilities;
-    public List<Material> materials;
-    private Dictionary<int, Material> matMap;
-
 
     // Use this for initialization
     void Start()
     {
-        matMap = new Dictionary<int, Material>();
-        foreach (Material m in materials)
-        {
-            int val = (int)System.Enum.Parse(typeof(UIDropDownColor), m.name, true);
-            matMap.Add(val, m);
-        }
         namePossibilities = new Dictionary<Fraction, NameParts>();
         namePossibilities.Add(Fraction.Allies, new NameParts());
         namePossibilities.Add(Fraction.Axis, new NameParts());
@@ -83,6 +77,54 @@ public class PlayerSelectOptionsGenerator : MonoBehaviour
         }
     }
 
+    public static Fraction convertUIFractionToFraction(int uiFraction)
+    {
+        Fraction playerFraction = Fraction.Others;
+        switch (uiFraction)
+        {
+            case (int)UIDropDownFraction.Allies:
+                playerFraction = Fraction.Allies;
+                break;
+            case (int)UIDropDownFraction.Axis:
+                playerFraction = Fraction.Axis;
+                break;
+            case (int)UIDropDownFraction.Soviet:
+                playerFraction = Fraction.Soviet;
+                break;
+        }
+        return playerFraction;
+    }
+
+    public static Color convertUIColorToColor(int uiColor)
+    {
+        Color playerColor = Color.cyan;
+        switch (uiColor)
+        {
+            case (int)UIDropDownColor.Black:
+                playerColor = Color.black;
+                break;
+            case (int)UIDropDownColor.Blue:
+                playerColor = Color.blue;
+                break;
+            case (int)UIDropDownColor.Cyan:
+                playerColor = Color.cyan;
+                break;
+            case (int)UIDropDownColor.Green:
+                playerColor = Color.green;
+                break;
+            case (int)UIDropDownColor.Red:
+                playerColor = Color.red;
+                break;
+            case (int)UIDropDownColor.White:
+                playerColor = Color.white;
+                break;
+            case (int)UIDropDownColor.Yellow:
+                playerColor = Color.yellow;
+                break;
+        }
+        return playerColor;
+    }
+
     PlayerHandler gameObject2Player(GameObject pc)
     {
 
@@ -109,47 +151,12 @@ public class PlayerSelectOptionsGenerator : MonoBehaviour
             }
             if (d.gameObject.name == "ColorDropDown")
             {
-                switch (d.value)
-                {
-                    case (int)UIDropDownColor.Black:
-                        p.playerColor = Color.black;
-                        break;
-                    case (int)UIDropDownColor.Blue:
-                        p.playerColor = Color.blue;
-                        break;
-                    case (int)UIDropDownColor.Cyan:
-                        p.playerColor = Color.cyan;
-                        break;
-                    case (int)UIDropDownColor.Green:
-                        p.playerColor = Color.green;
-                        break;
-                    case (int)UIDropDownColor.Red:
-                        p.playerColor = Color.red;
-                        break;
-                    case (int)UIDropDownColor.White:
-                        p.playerColor = Color.white;
-                        break;
-                    case (int)UIDropDownColor.Yellow:
-                        p.playerColor = Color.yellow;
-                        break;
-
-                }
-                p.playerMaterial = matMap[d.value];
+                p.playerColor = convertUIColorToColor(d.value);
+                p.playerMaterial = PlayerColorMaterialDispencer.GetMaterialFromColorIndex(d.value);
             }
             if (d.gameObject.name == "FractionDropDown")
             {
-                switch (d.value)
-                {
-                    case (int)UIDropDownFraction.Allies:
-                        p.playerFraction = Fraction.Allies;
-                        break;
-                    case (int)UIDropDownFraction.Axis:
-                        p.playerFraction = Fraction.Axis;
-                        break;
-                    case (int)UIDropDownFraction.Soviet:
-                        p.playerFraction = Fraction.Soviet;
-                        break;
-                }
+                p.playerFraction = convertUIFractionToFraction(d.value);
                 p.playerInitialSpawnObjects = new List<GameObject>();
                 p.playerInitialSpawnObjects.AddRange(listOfSpawnObjects.ToArray());
             }

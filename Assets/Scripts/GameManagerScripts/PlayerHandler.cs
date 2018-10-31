@@ -73,7 +73,7 @@ public class PlayerHandler : MonoBehaviour
             if (!playerObjectSpawnParent)
             {
                 go = new GameObject(gameObjectSpawnParentName);
-                go.transform.SetParent(gameManagerInstance.newUnitHierarchyParentObject.transform);
+                go.transform.SetParent(gameManagerInstance.gameObject.transform);
                 playerObjectSpawnParent = go ? go.transform : null;
                 if (!playerObjectSpawnParent)
                     Debug.Log("Could not generate Parent...");
@@ -81,14 +81,35 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
+    public void spawnObject(GameObject prefab, Vector3 spawningPoint)
+    {
+        GameObject obj = GameObject.Instantiate(prefab, spawningPoint, Quaternion.identity);
+        if (!obj)
+        {
+            Debug.LogError("Instantiating of object " + prefab.name + " failed!");
+            return;
+        }
+        if (!playerObjectSpawnParent)
+        {
+            Debug.LogError("SpawnParent of player " + playerName + " not set!");
+            return;
+        }
+        obj.transform.parent = playerObjectSpawnParent.transform;
+        foreach (GenericUnit u in obj.GetComponentsInChildren<GenericUnit>())
+        {
+            u.owner = this;
+        }
+        foreach (MeshRenderer m in obj.GetComponentsInChildren<MeshRenderer>())
+        {
+            m.materials = new Material[] { playerMaterial };
+
+        }
+    }
+
     void joinEvent(PlayerHandler p)
     {
         aggressionMatrix.Add(p, DiplomacyStatus.AttackPossible);
+        Debug.Log("Player " + playerName + " added a new Matrix Element for new player " + p.playerName);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

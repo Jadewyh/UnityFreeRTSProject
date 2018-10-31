@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ObjectBuildCostObject : MonoBehaviour
+public class ObjectBuildCostObject : MiddleButtonObjects
 {
     public float resourceCost;
     public GameObject objectToInstanciate;
-    [ReadOnly] public GameManager gameManager;
-    private Button myButton;
 
     // Use this for initialization
-    void Start()
+    new void Start()
     {
-        gameManager = GameManager.myInstance;
-        myButton = this.GetComponent<Button>();
-        if (!myButton)
-            myButton = gameObject.AddComponent<Button>();
+        base.Start();
+        myButton.GetComponentInChildren<Text>().text = buttonName;
         myButton.onClick.AddListener(delegate { gameManager.spawnObject(this); });
     }
     //OnMouseDown is called when the user clicks on the unit, thus toggling selection and changing the cursor...
